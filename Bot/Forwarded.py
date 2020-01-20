@@ -10,10 +10,12 @@ class ForwardedMessages:
                 for msg in self.obj.message.fwd_messages:
                     if msg['text']:
                         quote.append(msg["text"])
-                return {authors[0]: ', '.join(quote)}
+                if quote:
+                    return {authors[0]: ', '.join(quote)}
+                return None
             else:
                 quote = {}
                 for msg in self.obj.message.fwd_messages:
                     if msg['text']:
                         quote.update({msg['from_id']: msg['text']})
-                return quote
+                return quote if quote else None
