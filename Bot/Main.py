@@ -1,8 +1,10 @@
+from time import sleep
+
 import requests
 from vk_api.bot_longpoll import VkBotEventType
 
-from Bot.BotApi import Vk
-from Bot.Messages import NewMessage
+from BotApi import Vk
+from Messages import NewMessage
 
 VK = Vk()
 
@@ -24,3 +26,4 @@ def MainBot():
 
 if __name__ == '__main__':
     MainBot()
+

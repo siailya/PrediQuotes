@@ -1,14 +1,9 @@
-import json
-from time import sleep
-
-import apiai as apiai
 import vk_api.vk_api
 from vk_api import VkUpload
 from vk_api.bot_longpoll import VkBotLongPoll
-from vk_api.longpoll import VkLongPoll
 from vk_api.utils import get_random_id
 
-from Bot.Config import Config
+from Config import Config
 
 
 class Vk:
@@ -23,7 +18,6 @@ class Vk:
                                  random_id=get_random_id(),
                                  attachment=attachment,
                                  keyboard=keyboard)
-
 
     def CheckOnline(self, user_id):
         info = self.VkApi.users.get(user_ids=user_id, fields=['online'])
@@ -40,6 +34,12 @@ class Vk:
     def UserNameGet(self, user_id):
         info = self.VkApi.users.get(user_ids=user_id)[0]
         return info['first_name'], info['last_name']
+
+    def UserPhotoGet(self, user_id):
+        info = self.VkApi.users.get(user_ids=user_id, fields=['photo_max_orig'])[0]
+        if 'photo_max_orig' in info.keys():
+            return info['photo_max_orig']
+        return 'https://vk.com/images/camera_400.png?ava=1'
 
     def SetActivity(self, peer_id):
         self.VkApi.messages.setActivity(type='typing',
