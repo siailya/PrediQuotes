@@ -31,7 +31,9 @@ def by_forwarded_message(obj):
             if quote[0] > 0:
                 quoted = SingleQuote(quote, reg).assembly()
                 if quoted:
-                    VK.MessageSend(peer, 'Мемчик...\nСамые смешные мемы кидайте в предложку группы!', attachment=VK.UploadAttachmentPhoto(quoted))
+                    q = VK.UploadAttachmentPhoto(quoted)
+                    VK.MessageSend(peer, 'Мемчик...\nСамые смешные мемы кидайте в предложку группы!', attachment=q)
+                    VK.MessageSend(Config.CONSOLE, f'От: @id{obj.message["from_id"]}', attachment=q)
                     remove(quoted)
                 else:
                     VK.MessageSend(peer, 'При создании цитаты произошла ошибка!\nВозможно, цитата имела слишком много строк и символов!\nКраткость - сестра таланта!')
@@ -71,7 +73,9 @@ class Conference:
             if quote[0] > 0:
                 quoted = SingleQuote(quote, reg).assembly()
                 if quoted:
-                    VK.MessageSend(peer, 'Мемчик...\nСамые смешные мемы кидайте в предложку группы!', attachment=VK.UploadAttachmentPhoto(quoted))
+                    q = VK.UploadAttachmentPhoto(quoted)
+                    VK.MessageSend(peer, 'Мемчик...\nСамые смешные мемы кидайте в предложку группы!', attachment=q)
+                    VK.MessageSend(Config.CONSOLE, f'От: @id{obj.message["from_id"]}', attachment=q)
                     remove(quoted)
                 else:
                     VK.MessageSend(peer,
