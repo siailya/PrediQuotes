@@ -1,0 +1,3 @@
+class PredException(Exception):
+    pass
+
