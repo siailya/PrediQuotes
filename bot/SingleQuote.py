@@ -1,10 +1,9 @@
+import concurrent
 import textwrap as tw
 from io import BytesIO
 
 import requests
 from PIL import ImageOps, Image, ImageFilter, ImageDraw, ImageFont
-
-from Exceptions import PredException
 
 
 def choose_font_size(symbols):
@@ -27,20 +26,17 @@ def get_photo_from_url(photo_url):
 
 
 class SingleQuote:
-    def __init__(self, quote, photo_url, namelist, reg=False):
-        self.name = namelist[0]
-        self.surname = namelist[1]
-        self.fullname = (namelist[0] + " " + namelist[1]).strip()
+    def __init__(self, quote, photo_url, user_full_name, reg=True):
+        self.fullname = user_full_name
         self.photo_url = photo_url
-        self.img = None
         self.quote_font_size, self.wrap_fill = choose_font_size(len(quote))
         self.quote_text = ''
 
         for i in quote.replace('ё', 'е').split('\n'):
-            self.quote_text += self.prepare_text(i, reg) + '\n'
+            self.quote_text += self._prepare_text(i, reg) + '\n'
         self.quote_text.rstrip('\n')
 
-    def prepare_text(self, text, reg):
+    def _prepare_text(self, text, reg):
         if not reg:
             text = text.capitalize()
         prepared_quote = tw.fill(text, width=self.wrap_fill)
@@ -74,4 +70,10 @@ class SingleQuote:
             image_handle.seek(0)
 
             return image_handle
-        raise PredException("Слишком большая цитата! Текст будет пизда мелкий...")
+        raise Exception("Too small text")
+
+
+async def create_quote_async(loop, text, author_name, author_photo):
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        quoted = await loop.run_in_executor(pool, SingleQuote(text, author_photo, author_name).assembly)
+        return quoted
