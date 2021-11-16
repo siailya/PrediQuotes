@@ -1,3 +1,0 @@
-class PredException(Exception):
-    pass
-
